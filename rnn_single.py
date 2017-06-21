@@ -89,7 +89,7 @@ class RNN:
 			target = [char_ix[ch] for ch in text[p+1:p+self.seq_len+1]]
 			
 			if n % 1000 == 0:
-				sample_ix = self.sample(self.last_h, inputs[0], 200)
+				sample_ix = self.sample(self.last_h, inputs[0], 1000)
 				txt = ''.join(ix_char[ix] for ix in sample_ix)
 				print '\n %s \n' % (txt,)
 		
@@ -101,6 +101,7 @@ class RNN:
 		
 			for param, dparam, mem in zip([self.Wxh, self.Whh, self.Why, self.Bh, self.By],[dWxh, dWhh, dWhy, dBh, dBy],[self.mWxh, self.mWhh, self.mWhy, self.mBh, self.mBy]):
 				mem += dparam * dparam
+				print(mem)
 				param += -self.learn_rate * dparam / np.sqrt(mem + 1e-8)
 			
 			#if n % 10000 == 0: self.save(dWxh, dWhh, dWhy, dBh, dBy)
@@ -127,7 +128,7 @@ def main(text):
 	
 	
 if __name__ == "__main__":
-	with open('text/gatsby.txt','r') as f:
+	with open('text/big.txt','rb') as f:
 		contents = f.read()
 	f.close()
 	
